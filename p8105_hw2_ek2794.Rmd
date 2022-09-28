@@ -10,15 +10,24 @@ date: "2022-09-28"
 library(tidyverse)
 library(readxl)
 library(haven)
+library(dplyr)
 
 ```
 
 
 We will import the csv file here.
 ```{r}
-mta_df = read_csv(file = "./p8105_hw2_ek2794/NYC_mta.csv")
-mta_df = janitor::clean_names(mta_df)
-names(mta_df)
+mta_df = read_csv(file = "./NYC_mta.csv", col_types = cols(route8 = "c", route9 = "c", route10 = "c", route11 = "c")) %>%
+  janitor::clean_names() %>%
+  select(line, station_name, station_latitude, station_longitude, starts_with("route"), entry, vending, entrance_type, ada) %>%
+  mutate(entry = ifelse(entry == "YES", TRUE, FALSE)) %>%
+  pivot_longer(
+    route1:route11,
+    names_to = "route_num",
+    values_to = "route")
+
+```
+
 ```
 
 
