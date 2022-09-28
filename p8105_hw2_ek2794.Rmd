@@ -28,9 +28,7 @@ mta_df = read_csv(file = "./NYC_mta.csv", col_types = cols(route8 = "c", route9 
 
 ```
 
-```
-
-
+This dataset has 10 variables including line, station name, station latitude, station longitude, entry, vending, entrance type, ada, route number, and route value. There are 20,548 rows. Here we changed the entry variable from YES NO to `true` `false` with the mutate function. We changed the route 1 to route 11 from individual variables to a combined route_num variable and route variable to tidy up the data.
 
 
 ## R Markdown
