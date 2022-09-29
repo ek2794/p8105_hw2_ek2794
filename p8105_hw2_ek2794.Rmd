@@ -31,6 +31,19 @@ mta_df = read_csv(file = "./NYC_mta.csv", col_types = cols(route8 = "c", route9 
 This dataset has 10 variables including line, station name, station latitude, station longitude, entry, vending, entrance type, ada, route number, and route value. There are 20,548 rows. Here we changed the entry variable from YES NO to `true` `false` with the mutate function. We changed the route 1 to route 11 from individual variables to a combined route_num variable and route variable to tidy up the data.
 
 
+```{r}
+distinct(mta_df, line, station_name)
+```
+## There are 465 distinct stations. 
+
+```{r}
+filter(mta_df, ada == "TRUE")
+```
+
+## There are 5148 ada compliant stations. 
+
+
+
 ## R Markdown
 
 This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
