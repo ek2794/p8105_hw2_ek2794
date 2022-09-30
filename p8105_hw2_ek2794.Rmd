@@ -56,6 +56,7 @@ mrtrash_df = read_xlsx("Trash_Wheels.xlsx", sheet = "Mr. Trash Wheel",
   janitor::clean_names() %>%
   drop_na(dumpster) %>%
   mutate(
+    dumpster = as.numeric(dumpster),
     sports_balls = as.integer(round(sports_balls, digits= 0)),
     role = paste('mr', row_number(), sep = '_')) %>%
     relocate(role)
@@ -64,6 +65,7 @@ mrtrash_df = read_xlsx("Trash_Wheels.xlsx", sheet = "Mr. Trash Wheel",
 
 professor_trashwheel_df = read_xlsx("Trash_Wheels.xlsx", sheet = "Professor Trash Wheel", range = "A2:N116") %>%
   janitor::clean_names() %>%
+  dumpster = as.numeric(dumpster) %>%
   drop_na(dumpster) %>%
   mutate(
     sports_balls = as.integer(round(sports_balls, digits= 0)),
@@ -71,7 +73,14 @@ professor_trashwheel_df = read_xlsx("Trash_Wheels.xlsx", sheet = "Professor Tras
   relocate(role) 
 
 
+total_trashwheel = bind_rows(mrtrash_df, professor_trashwheel_df)
 ```
+
+With our cleaned file, mrtrash_df is the cleaned up Mr. Trash Wheel Sheet and professor_trashwheel_df is the cleaned up Professor Trashwheel Sheet that now both have 15 variables that include the role (mr or professor labels with line row), dumpster number, month, year, date (in the prior annotation of `year`-`month`-`day`), weight_tons, volume in cubic yards, plastic bottles, polystyrene, cigarette butts, glass bottles, grocery bags, chips bags, sports balls, and home powered. 
+
+The Mr. Trash Wheel Sheet has a total of 454 observations. Professor Trash Wheel has a total of 71 observations. Together, in the combined `total_trashwheel` document, there are a combined 525 observations. 
+
+
 
 ### Problem 3 FiveThirtyEight 
 
