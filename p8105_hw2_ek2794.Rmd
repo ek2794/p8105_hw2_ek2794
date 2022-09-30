@@ -47,19 +47,30 @@ filter(mta_df, ada == "TRUE")
 filter(mta_df, vending =="NO" & entry==TRUE)
 
 ```
-There are 759 stations that allow both entry without vending.
+There are 759 stops that allow both entry without vending.
 
 ### Problem 2 
 ```{r}
-trash_df = read_xlsx("Trash_Wheels.xlsx", sheet = "Mr. Trash Wheel",
+mrtrash_df = read_xlsx("Trash_Wheels.xlsx", sheet = "Mr. Trash Wheel",
   range = "A2:N535") %>%
   janitor::clean_names() %>%
+  drop_na(dumpster) %>%
   mutate(
-    dumpster = as.numeric(dumpster), 
-    sports_balls = round(sports_balls, digits= 0) %>% as.integer()
-    )%>%
-  filter(dumpster >0)
-  
+    sports_balls = as.integer(round(sports_balls, digits= 0)),
+    role = paste('mr', row_number(), sep = '_')) %>%
+    relocate(role)
+
+ 
+
+professor_trashwheel_df = read_xlsx("Trash_Wheels.xlsx", sheet = "Professor Trash Wheel", range = "A2:N116") %>%
+  janitor::clean_names() %>%
+  drop_na(dumpster) %>%
+  mutate(
+    sports_balls = as.integer(round(sports_balls, digits= 0)),
+    role = paste("professor", row_number(), sep = "_")) %>%
+  relocate(role) 
+
+
 ```
 
 ### Problem 3 FiveThirtyEight 
@@ -68,7 +79,7 @@ trash_df = read_xlsx("Trash_Wheels.xlsx", sheet = "Mr. Trash Wheel",
 ```{r}
 pols_df = read_csv(file = "./fivethirtyeight_datasets/pols-month.csv")%>%
 janitor::clean_names() %>%
-  separate(pols_df, col=mon, into =c ("year", "month", "date"), sep = "/")
+  separate(pols_df, col=mon, into =c ("year", "month", "date"), sep = "/-")
 
 ```{r}
 snp_df = read_csv(file = "./fivethirtyeight_datasets/snp.csv")
