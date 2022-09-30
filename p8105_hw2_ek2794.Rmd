@@ -47,7 +47,7 @@ filter(mta_df, ada == "TRUE")
 filter(mta_df, vending =="NO" & entry==TRUE)
 
 ```
-There are 759 ..
+There are 759 stations that allow both entry without vending.
 
 ### Problem 2 
 ```{r}
@@ -62,30 +62,23 @@ trash_df = read_xlsx("Trash_Wheels.xlsx", sheet = "Mr. Trash Wheel",
   
 ```
 
-
-
-  
-)
-
-  
-
-
-
-
 ### Problem 3 FiveThirtyEight 
 
 ## R Markdown
 ```{r}
-pols_df = read_csv(file = "./fivethirtyeight_datasets/pols-months.csv", sheet= "Mr._Trash_Wheel", %>%
+pols_df = read_csv(file = "./fivethirtyeight_datasets/pols-month.csv")%>%
 janitor::clean_names()
 
 
-
-```
 ```{r}
-snp_df = read_csv(file = "./snp.csv")
+snp_df = read_csv(file = "./fivethirtyeight_datasets/snp.csv")
+janitor::clean_names)
 ```
 
+```{r}
+unemployment_df = read_csv(file = "./fivethirtyeight_datasets/unemployment.csv")
+janitor::clean_names()
+```
 
 
 
