@@ -93,11 +93,12 @@ The total number of sports balls collected by Mr. Trash Wheel in 2020 is = `sum(
 
 ### Problem 3 FiveThirtyEight 
 
+
+Here we clean the pols-month.csv to break up the variable mon into integer variables year, month, and day. We replace the month number with the month name. We create a president variable taking values gop and dem and remove prez_dem and prez_gop. we remove the day variable.
 ```{r}
 pols_df = read_csv("./fivethirtyeight_datasets/pols-month.csv") %>%
 janitor::clean_names() %>%
-  mutate(date=lubridate::mdy(date)) %>%
-  separate(col = date, into=c("year", "month", "date"), convert = TRUE) %>%
+  separate(col=mon,into=c('year','month','day'), sep="-") %>%
   mutate(
     year = as.integer(year),
     month = as.integer(month),
@@ -112,10 +113,10 @@ janitor::clean_names() %>%
     month = replace(month, month == "9", "September"),
     month = replace(month, month == "10", "October"),
     month = replace(month, month == "11", "November"),
-    month = replace(month, month == "12", "Decembmer"))
-
-
-
+    month = replace(month, month == "12", "Decembmer"),
+    president = recode(prez_gop, "1" = "gop", "0" = "dem"))
+    
+pols_df<-select(pols_df,-c(day,prez_gop,prez_dem))
 
 ```
 
