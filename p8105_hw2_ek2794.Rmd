@@ -11,6 +11,7 @@ library(tidyverse)
 library(readxl)
 library(haven)
 library(dplyr)
+library(lubridate)
 
 
 
@@ -72,24 +73,8 @@ professor_trashwheel_df = read_xlsx("Trash.xlsx", sheet = "Professor Trash Wheel
     role = paste("professor", row_number(), sep = "_")) %>%
   relocate(role) 
 
-
-
-
 total_trashwheel = bind_rows(mrtrash_df, professor_trashwheel_df)
 
-  )
-  dumpster = as.numeric(dumpster)
-
-professor_trashwheel_df = read_xlsx("Trash.xlsx", sheet = "Professor Trash Wheel", range = "A2:N116") %>%
-  janitor::clean_names() %>%
-  dumpster = as.numeric(dumpster) %>%
-  drop_na(dumpster) %>%
-  mutate(
-    role = paste("professor", row_number(), sep = "_")) %>%
-  relocate(role) 
-
-
-total_trashwheel = bind_rows(mrtrash_df, professor_trashwheel_df)
 ```
 
 With our cleaned file, mrtrash_df is the cleaned up Mr. Trash Wheel Sheet and professor_trashwheel_df is the cleaned up Professor Trashwheel Sheet that now both have 15 variables that include the role (mr or professor labels with line row), dumpster number, month, year, date, weight_tons, volume in cubic yards, plastic bottles, polystyrene, cigarette butts, glass bottles, grocery bags, chips bags, sports balls, and home powered. 
@@ -98,22 +83,39 @@ The Mr. Trash Wheel Sheet has a total of 454 observations. Professor Trash Wheel
 
 ```
 
+The total weight of trash collected by Professor Trash Wheel is = 
+`r sum(professor_trashwheel_df$weight_tons)`
+
+The total number of sports balls collected by Mr. Trash Wheel in 2020 
+
 
 
 ### Problem 3 FiveThirtyEight 
 
-
+```
 
 ## R Markdown
 ```{r}
 pols_df = read_csv("./fivethirtyeight_datasets/pols-month.csv") %>%
 janitor::clean_names() %>%
 separate(col = "mon", into = c("year", "month", "day"), sep = "-") %>%
-mutate(
 year = as.integer(year),
 month = as.integer(month),
 day = as.integer(day),
-month = recode(month, "1" = "jan", "2" = "feb", "3" = "mar", "4" = "apr", "5" = may", "6" = "jun", "7" = "jul", "8" = "aug", "9" = "sep", "10" = "oct", "11" = nov", "12" = "dec")
+month = replace(month, month == "1", "January"),
+month = replace(month, month == "2", "February"),
+month = replace(month, month == "3", "March"),
+month = replace(month, month == "4", "April"),
+month = replace(month, month == "5", "May"),
+month = replace(month, month == "6", "June"),
+month = replace(month, month == "7", "July"),
+month = replace(month, month == "8", "August"),
+month = replace(month, month == "9", "September"),
+month = replace(month, month == "10", "October"),
+month = replace(month, month == "11", "November"),
+month = replace(month, month == "12", "Decembmer"))
+
+
 )
 
 
