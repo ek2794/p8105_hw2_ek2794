@@ -12,6 +12,8 @@ library(readxl)
 library(haven)
 library(dplyr)
 
+
+
 ```
 
 
@@ -51,7 +53,7 @@ There are 759 stops that allow both entry without vending.
 
 ### Problem 2 
 ```{r}
-mrtrash_df = read_xlsx("Trash_Wheels.xlsx", sheet = "Mr. Trash Wheel",
+mrtrash_df = read_xlsx("Trash.xlsx", sheet = "Mr. Trash Wheel",
   range = "A2:N535") %>%
   janitor::clean_names() %>%
   drop_na(dumpster) %>%
@@ -59,16 +61,30 @@ mrtrash_df = read_xlsx("Trash_Wheels.xlsx", sheet = "Mr. Trash Wheel",
     dumpster = as.numeric(dumpster),
     sports_balls = as.integer(round(sports_balls, digits= 0)),
     role = paste('mr', row_number(), sep = '_')) %>%
-    relocate(role)
+    relocate(role) %>%
 
- 
+professor_trashwheel_df = read_xlsx("Trash.xlsx", sheet = "Professor Trash Wheel", range = "A2:N116") %>%
+  janitor::clean_names() %>%
+  mutate(
+    dumpster = as.numeric(dumpster)) %>%
+  filter(dumpster >0) %>%
+  mutate(
+    role = paste("professor", row_number(), sep = "_")) %>%
+  relocate(role) 
 
-professor_trashwheel_df = read_xlsx("Trash_Wheels.xlsx", sheet = "Professor Trash Wheel", range = "A2:N116") %>%
+
+
+
+total_trashwheel = bind_rows(mrtrash_df, professor_trashwheel_df)
+
+  )
+  dumpster = as.numeric(dumpster)
+
+professor_trashwheel_df = read_xlsx("Trash.xlsx", sheet = "Professor Trash Wheel", range = "A2:N116") %>%
   janitor::clean_names() %>%
   dumpster = as.numeric(dumpster) %>%
   drop_na(dumpster) %>%
   mutate(
-    sports_balls = as.integer(round(sports_balls, digits= 0)),
     role = paste("professor", row_number(), sep = "_")) %>%
   relocate(role) 
 
@@ -76,23 +92,49 @@ professor_trashwheel_df = read_xlsx("Trash_Wheels.xlsx", sheet = "Professor Tras
 total_trashwheel = bind_rows(mrtrash_df, professor_trashwheel_df)
 ```
 
-With our cleaned file, mrtrash_df is the cleaned up Mr. Trash Wheel Sheet and professor_trashwheel_df is the cleaned up Professor Trashwheel Sheet that now both have 15 variables that include the role (mr or professor labels with line row), dumpster number, month, year, date (in the prior annotation of `year`-`month`-`day`), weight_tons, volume in cubic yards, plastic bottles, polystyrene, cigarette butts, glass bottles, grocery bags, chips bags, sports balls, and home powered. 
+With our cleaned file, mrtrash_df is the cleaned up Mr. Trash Wheel Sheet and professor_trashwheel_df is the cleaned up Professor Trashwheel Sheet that now both have 15 variables that include the role (mr or professor labels with line row), dumpster number, month, year, date, weight_tons, volume in cubic yards, plastic bottles, polystyrene, cigarette butts, glass bottles, grocery bags, chips bags, sports balls, and home powered. 
 
 The Mr. Trash Wheel Sheet has a total of 454 observations. Professor Trash Wheel has a total of 71 observations. Together, in the combined `total_trashwheel` document, there are a combined 525 observations. 
+
+```
 
 
 
 ### Problem 3 FiveThirtyEight 
 
+
+
 ## R Markdown
 ```{r}
-pols_df = read_csv(file = "./fivethirtyeight_datasets/pols-month.csv")%>%
+pols_df = read_csv("./fivethirtyeight_datasets/pols-month.csv") %>%
 janitor::clean_names() %>%
-  separate(pols_df, col=mon, into =c ("year", "month", "date"), sep = "/-")
+separate(col = "mon", into = c("year", "month", "day"), sep = "-") %>%
+mutate(
+year = as.integer(year),
+month = as.integer(month),
+day = as.integer(day),
+month = recode(month, "1" = "jan", "2" = "feb", "3" = "mar", "4" = "apr", "5" = may", "6" = "jun", "7" = "jul", "8" = "aug", "9" = "sep", "10" = "oct", "11" = nov", "12" = "dec")
+)
+
+
+
+
+
+mutate(year = lubridate::year(mon),
+month = lubridate::month(mon),
+day = lubridate::day(mon))
+
+)
+mon = as.numeric(mon) %>%
+separate(pols_df, "mon", c("year", "month", "day"), sep = "-")
+
+
+
+view(pols_df)
 
 ```{r}
 snp_df = read_csv(file = "./fivethirtyeight_datasets/snp.csv")
-janitor::clean_names)
+janitor::clean_names()
 ```
 
 ```{r}
