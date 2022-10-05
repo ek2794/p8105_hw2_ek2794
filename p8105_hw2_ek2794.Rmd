@@ -84,66 +84,43 @@ The Mr. Trash Wheel Sheet has a total of 454 observations. Professor Trash Wheel
 ```
 
 The total weight of trash collected by Professor Trash Wheel is = 
-`r sum(professor_trashwheel_df$weight_tons)`
+`sum(pull(professor_trashwheel_df, weight_tons))`
 
-The total number of sports balls collected by Mr. Trash Wheel in 2020 
+
+The total number of sports balls collected by Mr. Trash Wheel in 2020 is = `sum(pull(mrtrash_df, sports_balls))`
 
 
 
 ### Problem 3 FiveThirtyEight 
 
-```
-
-## R Markdown
 ```{r}
 pols_df = read_csv("./fivethirtyeight_datasets/pols-month.csv") %>%
 janitor::clean_names() %>%
-separate(col = "mon", into = c("year", "month", "day"), sep = "-") %>%
-year = as.integer(year),
-month = as.integer(month),
-day = as.integer(day),
-month = replace(month, month == "1", "January"),
-month = replace(month, month == "2", "February"),
-month = replace(month, month == "3", "March"),
-month = replace(month, month == "4", "April"),
-month = replace(month, month == "5", "May"),
-month = replace(month, month == "6", "June"),
-month = replace(month, month == "7", "July"),
-month = replace(month, month == "8", "August"),
-month = replace(month, month == "9", "September"),
-month = replace(month, month == "10", "October"),
-month = replace(month, month == "11", "November"),
-month = replace(month, month == "12", "Decembmer"))
-
-
-)
-
+  mutate(date=lubridate::mdy(date)) %>%
+  separate(col = date, into=c("year", "month", "date"), convert = TRUE) %>%
+  mutate(
+    year = as.integer(year),
+    month = as.integer(month),
+    month = replace(month, month == "1", "January"),
+    month = replace(month, month == "2", "February"),
+    month = replace(month, month == "3", "March"),
+    month = replace(month, month == "4", "April"),
+    month = replace(month, month == "5", "May"),
+    month = replace(month, month == "6", "June"),
+    month = replace(month, month == "7", "July"),
+    month = replace(month, month == "8", "August"),
+    month = replace(month, month == "9", "September"),
+    month = replace(month, month == "10", "October"),
+    month = replace(month, month == "11", "November"),
+    month = replace(month, month == "12", "Decembmer"))
 
 
 
 
-mutate(year = lubridate::year(mon),
-month = lubridate::month(mon),
-day = lubridate::day(mon))
-
-)
-mon = as.numeric(mon) %>%
-separate(pols_df, "mon", c("year", "month", "day"), sep = "-")
-
-
-
-view(pols_df)
-
-```{r}
-snp_df = read_csv(file = "./fivethirtyeight_datasets/snp.csv")
-janitor::clean_names()
 ```
 
-```{r}
-unemployment_df = read_csv(file = "./fivethirtyeight_datasets/unemployment.csv")
-janitor::clean_names()
-```
 
+d
 
 
 This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
