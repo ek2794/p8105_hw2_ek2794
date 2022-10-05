@@ -11,7 +11,7 @@ library(tidyverse)
 library(readxl)
 library(haven)
 library(dplyr)
-library(lubridate)
+
 
 
 
@@ -113,15 +113,69 @@ janitor::clean_names() %>%
     month = replace(month, month == "9", "September"),
     month = replace(month, month == "10", "October"),
     month = replace(month, month == "11", "November"),
-    month = replace(month, month == "12", "Decembmer"),
+    month = replace(month, month == "12", "December"),
     president = recode(prez_gop, "1" = "gop", "0" = "dem"))
     
 pols_df<-select(pols_df,-c(day,prez_gop,prez_dem))
 
 ```
 
+Second, clean the data in snp.csv using a similar process to the above. For consistency across datasets, arrange according to year and month, and organize so that year and month are the leading columns.
 
-d
+```{r}
+library(lubridate)
+```
+```{r}
+snp_df = read_csv("./fivethirtyeight_datasets/snp.csv") %>%
+janitor::clean_names() %>%
+mutate(date = lubridate::mdy(date)) %>%
+separate(col=date, into = c("year", "month", "date"), convert = TRUE)%>%
+mutate(
+year = as.integer(year),
+month = as.integer(month),
+month = replace(month, month == "1", "January"),
+month = replace(month, month == "2", "February"),
+month = replace(month, month == "3", "March"),
+month = replace(month, month == "4", "April"),
+month = replace(month, month == "5", "May"),
+month = replace(month, month == "6", "June"),
+month = replace(month, month == "7", "July"),
+month = replace(month, month == "8", "August"),
+month = replace(month, month == "9", "September"),
+month = replace(month, month == "10", "October"),
+month = replace(month, month == "11", "November"),
+month = replace(month, month == "12", "December"))
+
+snp_df<-select(snp_df,-date)
+head(snp_df)
+```
+
+Third, tidy the unemployment data so that it can be merged with the previous datasets. This process will involve switching from “wide” to “long” format; ensuring that key variables have the same name; and ensuring that key variables take the same values.
+
+```{r}
+unemployment_df = read_csv("./fivethirtyeight_datasets/unemployment.csv") %>%
+janitor::clean_names() %>%
+pivot_longer(
+jan:dec,
+names_to="month",
+values_to="unemployment" %>%
+mutate(
+year = as.integer(year),
+month = replace(month, month == "jan", "January"),
+month = replace(month, month == "feb", "February"),
+month = replace(month, month == "mar", "March"),
+month = replace(month, month == "apr", "April"),
+month = replace(month, month == "may", "May"),
+month = replace(month, month == "jun", "June"),
+month = replace(month, month == "jul", "July"),
+month = replace(month, month == "aug", "August"),
+month = replace(month, month == "sep", "September"),
+month = replace(month, month == "oct", "October"),
+month = replace(month, month == "nov", "November"),
+month = replace(month, month == "dec", "December")
+)
+
+```
 
 
 This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
