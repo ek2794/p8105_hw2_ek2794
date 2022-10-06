@@ -65,6 +65,8 @@ mrtrash_df = read_xlsx("Trash.xlsx", sheet = "Mr. Trash Wheel",
     role = paste('mr', row_number(), sep = '_')) %>%
     relocate(role) 
 
+
+
 professor_trashwheel_df = read_xlsx("Trash.xlsx", sheet = "Professor Trash Wheel", range = "A2:N116") %>%
   janitor::clean_names() %>%
   mutate(
@@ -76,9 +78,11 @@ professor_trashwheel_df = read_xlsx("Trash.xlsx", sheet = "Professor Trash Wheel
 
 total_trashwheel = bind_rows(mrtrash_df, professor_trashwheel_df)
 
+summary(total_trashwheel)
+head(total_trashwheel)
 ```
 
-With our cleaned file, mrtrash_df is the cleaned up Mr. Trash Wheel Sheet and professor_trashwheel_df is the cleaned up Professor Trashwheel Sheet that now both have 15 variables that include the role (mr or professor labels with line row), dumpster number, month, year, date, weight_tons, volume in cubic yards, plastic bottles, polystyrene, cigarette butts, glass bottles, grocery bags, chips bags, sports balls, and home powered. 
+With our cleaned file, mrtrash_df is the cleaned up Mr. Trash Wheel Sheet and professor_trashwheel_df is the cleaned up Professor Trashwheel Sheet that now both have 16 variables that include the role (mr or professor labels with line row), dumpster number, month, year, date, weight_tons, volume in cubic yards, plastic bottles, polystyrene, cigarette butts, glass bottles, grocery bags, chips bags, sports balls, and home powered. 
 
 The Mr. Trash Wheel Sheet has a total of 454 observations. Professor Trash Wheel has a total of 71 observations. Together, in the combined `total_trashwheel` document, there are a combined 525 observations. 
 
@@ -187,6 +191,22 @@ combined1_df = left_join(pols_df, snp_df, by = c("year", "month"))
 
 combined2_df= left_join(combined1_df, unemployment_df, by = c("year", "month"))
 ```
+
+
+head(pols_df)
+summary(pols_df)
+
+##The pols dataset has 9 variables including `year`, `month`, `gov_gop`, `sen_gop`, `rep_gop`, `gov_dem`, `sen_dem`, `rep_dem`, and president variable. There are 822 observations. The range of years is range(pull(pols_df,year)). 
+
+head(snp_df)
+summary(snp_df)
+
+##The snp dataset has 3 variables including `year`, `month`, and `close`. There are 787 observations included in this dataset. The range of years is `range(pull(snp_df,year))`. 
+
+head(unemployment_df)
+summary(unemployment_df)
+
+##The unemployment dataset has 3 variables `year`, `month`, and `unemployment` status. The range of years is range(pull(unemployment_df,year)). 
 
 This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
 
